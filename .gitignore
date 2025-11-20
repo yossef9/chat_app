@@ -1,6 +1,6 @@
 # Dependencies
 node_modules/
-backend/ai-docs-chat/venv/
+#backend/ai-docs-chat/venv/
 backend/ai-docs-chat/__pycache__/
 backend/ai-docs-chat/src/__pycache__/
 backend/ai-docs-chat/src/*/__pycache__/
