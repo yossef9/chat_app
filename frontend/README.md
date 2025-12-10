@@ -70,7 +70,18 @@ python -m venv venv
 cd backend/ai-docs-chat
 python -m venv venv
 venv\Scripts\activate.bat
+uvicorn src.main:app --reload  
 ```
+## Run the frontend (React + Vite)
+
+From the repository root:
+
+```bash
+npm install
+npm run dev
+```
+
+Vite dev server is usually available at `http://localhost:5173`.
 
 ### Install dependencies
 With activated venv
@@ -92,24 +103,9 @@ MONGO_URI=your_mongodb_connection_uri
 
 Adjust keys and names based on your environment.
 
-### Run backend
-Start the FastAPI server (from `backend/ai-docs-chat`):
-```bash
-uvicorn src.main:app --reload
-```
 
-The backend defaults to `http://localhost:8000`.
 
-## Run the frontend (React + Vite)
 
-From the repository root:
-
-```bash
-npm install
-npm run dev
-```
-
-Vite dev server is usually available at `http://localhost:5173`.
 
 ## Quick checklist
 

@@ -23,7 +23,7 @@ from src.models.document import FileType
 
 
 # Create document
-@router.post("/", response_model=Document)
+'''@router.post("/", response_model=Document)
 async def create_document(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
@@ -56,6 +56,52 @@ async def create_document(
     await db.documents.insert_one(document.dict())
 
     # FIX: Use file_content instead of file_bytes
+    background_tasks.add_task(rag_service.add_document, document, file_content)
+    return document'''
+
+@router.post("/", response_model=Document)
+async def create_document(
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_active_user)
+):
+    db = get_db()
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+
+    # Check if a document with the same name already exists for this user
+    existing_document = await db.documents.find_one({
+        "user_id": current_user.id,
+        "filename": file.filename
+    })
+
+    if existing_document:
+        raise HTTPException(
+            status_code=400,
+            detail="A file with the same filename already exists."
+        )
+
+    file_content = await file.read()
+    doc_id = str(uuid.uuid4())
+    fs_bucket = AsyncIOMotorGridFSBucket(db)
+
+    gridfs_id = await fs_bucket.upload_from_stream(
+        file.filename,
+        file_content,
+        metadata={"user_id": current_user.id, "document_id": doc_id}
+    )
+
+    document = Document(
+        id=doc_id,
+        user_id=current_user.id,
+        type=document_service.get_filetype_from_filename(file.filename),
+        filename=file.filename,
+        gridfs_id=str(gridfs_id),
+        status="uploaded"
+    )
+
+    await db.documents.insert_one(document.dict())
+
     background_tasks.add_task(rag_service.add_document, document, file_content)
     return document
 

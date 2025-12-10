@@ -171,6 +171,7 @@ class RagService:
                 "document_id": document.id,
                 "message": f"Document processed successfully into {len(chunks)} chunks"
             }
+        
         except Exception as e:
             logger.error(f"Failed to process document: {str(e)}")
             return {"status": "error", "message": f"Failed to process document: {str(e)}", "document_id": document.id}
@@ -233,10 +234,10 @@ class RagService:
             
             # Format the response with sources
             answer = result["result"]
-            if sources:
-                answer += "\n\n**Sources:**\n"
-                for i, source in enumerate(sources, 1):
-                    answer += f"{i}. **{source['filename']}** (Chunk #{source['chunk_index']})\n"
+           # if sources:
+            #    answer += "\n\n**Sources:**\n"
+             #   for i, source in enumerate(sources, 1):
+              #      answer += f"{i}. **{source['filename']}** (Chunk #{source['chunk_index']})\n"
             
             logger.info("Query processed successfully.")
             
@@ -245,9 +246,9 @@ class RagService:
             
             return {
                 "answer": answer,
-                "sources": sources,
+               # "sources": sources,
                 "question": question,
-                "document_ids": document_ids or "all_user_documents",
+             #   "document_ids": document_ids or "all_user_documents",
                 "status": "success"
             }
         except Exception as e:
