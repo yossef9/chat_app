@@ -34,8 +34,7 @@ markdown-it-py==4.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
 motor==3.7.1
-openai
-langchain-openai
+
 orjson==3.11.3
 packaging==25.0
 passlib==1.7.4
